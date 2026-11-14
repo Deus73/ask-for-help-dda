@@ -1,0 +1,246 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Supportmedewerker: presence-document met support == true (alleen via de console te zetten).
+    function isSupport() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/presence/$(request.auth.uid))
+        && get(/databases/$(database)/documents/presence/$(request.auth.uid)).data.get('support', false) == true;
+    }
+
+    // Uitnodigingscodes: alleen ingelogde gebruikers mogen ze lezen, en een code
+    // mag alleen één keer worden gebruikt, door de gebruiker die zich registreert.
+    match /invites/{code} {
+      allow read: if request.auth != null;
+      // Medewerkers maken uitnodigingscodes en mogen alleen codes intrekken die nog niet gebruikt zijn.
+      allow create: if isSupport()
+        && request.resource.data.used == false
+        && request.resource.data.keys().hasOnly(['used', 'createdBy', 'createdAt'])
+        && request.resource.data.createdBy == request.auth.uid;
+      allow delete: if isSupport() && resource.data.used == false;
+      allow update: if request.auth != null
+        && resource.data.used == false
+        && request.resource.data.used == true
+        && request.resource.data.usedBy == request.auth.uid;
+    }
+
+    // Gebruikersprofiel: de eigenaar leest en maakt het aan; medewerkers lezen het voor de gebruikerslijst.
+    match /users/{uid} {
+      allow read: if request.auth != null && (request.auth.uid == uid || isSupport());
+      allow create: if request.auth != null && request.auth.uid == uid;
+      allow update: if isSupport()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['shareCode']);
+      allow delete: if request.auth != null && request.auth.uid == uid;
+
+      // Personen die dit toestel eerder heeft goedgekeurd voor schermdeling.
+      match /trusted/{viewerUid} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+
+    // Schermdeling: alleen de kijker (viewer) en de host zien een sessie.
+    match /sessions/{sid} {
+      allow read: if request.auth != null
+        && (resource.data.hostUid == request.auth.uid
+            || resource.data.viewerUid == request.auth.uid);
+      allow create: if request.auth != null
+        && request.resource.data.viewerUid == request.auth.uid
+        && request.resource.data.status == 'requested';
+      allow update: if request.auth != null
+        && (resource.data.hostUid == request.auth.uid
+            || resource.data.viewerUid == request.auth.uid);
+
+      match /candidates/{cid} {
+        allow read, create: if request.auth != null
+          && (get(/databases/$(database)/documents/sessions/$(sid)).data.hostUid == request.auth.uid
+              || get(/databases/$(database)/documents/sessions/$(sid)).data.viewerUid == request.auth.uid);
+      }
+    }
+
+    // Deelcodes: zo kan iemand een notitie delen zonder het e-mailadres te tonen.
+    match /shareCodes/{code} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      // Medewerkers maken een nieuwe deelcode voor een klant en verwijderen de oude.
+      allow create: if isSupport()
+        && request.resource.data.uid is string
+        && request.resource.data.keys().hasOnly(['uid', 'createdBy', 'createdAt'])
+        && request.resource.data.createdBy == request.auth.uid;
+      allow update: if false;
+      allow delete: if isSupport()
+        || (request.auth != null && resource.data.uid == request.auth.uid);
+    }
+
+    // Notities: alleen de eigenaar en personen met wie gedeeld is, kunnen lezen.
+    // Alleen de eigenaar wijzigt, deelt en verwijdert.
+    match /notes/{noteId} {
+      allow read: if request.auth != null
+        && (resource.data.ownerUid == request.auth.uid
+            || request.auth.uid in resource.data.sharedWith);
+      allow create: if request.auth != null
+        && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if request.auth != null
+        && (
+          (resource.data.ownerUid == request.auth.uid
+            && request.resource.data.ownerUid == request.auth.uid)
+          || (
+            request.auth.uid in resource.data.sharedWith
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['sharedWith'])
+            && request.resource.data.sharedWith is list
+            && !(request.auth.uid in request.resource.data.sharedWith)
+            && request.resource.data.sharedWith.size() == resource.data.sharedWith.size() - 1
+            && resource.data.sharedWith.hasAll(request.resource.data.sharedWith)
+          )
+        );
+      allow delete: if request.auth != null
+        && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // Lijst van bestanden die de app naar Google Drive heeft geüpload: alleen de eigenaar.
+    match /driveFiles/{fileId} {
+      allow read, delete: if request.auth != null
+        && resource.data.ownerUid == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if request.auth != null
+        && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.ownerUid == request.auth.uid;
+    }
+
+    // Aanwezigheid: alleen een tijdstempel; het support-vlag kan de gebruiker zelf niet zetten.
+    match /presence/{uid} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == uid
+        && !('support' in request.resource.data && request.resource.data.support == true);
+      allow update: if request.auth != null && request.auth.uid == uid
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['support']);
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Tickets: de klant ziet eigen tickets, supportmedewerkers zien alles.
+    // Wijzigen mag alleen in de velden die de app gebruikt.
+    match /tickets/{ticketId} {
+      allow read: if request.auth != null
+        && (resource.data.customerUid == request.auth.uid || isSupport());
+      // Een medewerker start zelf een gesprek met een klant; het wacht dan op de klant.
+      allow create: if request.auth != null
+        && (request.resource.data.customerUid == request.auth.uid
+            || (isSupport()
+                && request.resource.data.customerUid is string
+                && request.resource.data.assignedUid == request.auth.uid
+                && request.resource.data.status == 'waiting_customer'));
+      allow update: if request.auth != null
+        && request.resource.data.customerUid == resource.data.customerUid
+        && (
+          // Klant: status, laatste bericht en tijd.
+          (resource.data.customerUid == request.auth.uid
+            && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(['status', 'lastMessage', 'updatedAt']))
+          ||
+          // Medewerker: daarnaast de toewijzing, alleen aan zichzelf of om los te laten.
+          (isSupport()
+            && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(['status', 'lastMessage', 'updatedAt', 'assignedUid', 'assignedEmail'])
+            && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['assignedUid'])
+                || request.resource.data.get('assignedUid', null) in [request.auth.uid, null]))
+        );
+      // Een gesprek verwijderen mag de klant zelf, en supportmedewerkers.
+      allow delete: if request.auth != null
+        && (resource.data.customerUid == request.auth.uid || isSupport());
+
+      match /messages/{msgId} {
+        allow read: if request.auth != null
+          && (get(/databases/$(database)/documents/tickets/$(ticketId)).data.customerUid == request.auth.uid
+              || isSupport());
+        allow create: if request.auth != null
+          && request.resource.data.senderUid == request.auth.uid
+          && request.resource.data.fromSupport == isSupport()
+          && (get(/databases/$(database)/documents/tickets/$(ticketId)).data.customerUid == request.auth.uid
+              || isSupport());
+        allow update: if false;
+        allow delete: if request.auth != null
+          && (get(/databases/$(database)/documents/tickets/$(ticketId)).data.customerUid == request.auth.uid
+              || isSupport());
+      }
+    }
+
+    // Profielfoto: alleen de eigenaar leest, zet en verwijdert die. Het is een klein JPEG-bestand in base64.
+    match /avatars/{uid} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['image'])
+        && request.resource.data.image is string
+        && request.resource.data.image.size() < 60000;
+    }
+
+    // Profielgegevens: alleen de eigenaar leest en wijzigt de eigen gegevens.
+    match /profiles/{uid} {
+      function okText(name, max) {
+        return !(name in request.resource.data) || (request.resource.data[name] is string && request.resource.data[name].size() <= max);
+      }
+      allow read: if request.auth != null && (request.auth.uid == uid || isSupport());
+      allow delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['firstName', 'lastName', 'birthDate', 'address', 'whatsapp', 'contactEmail', 'avatarPreset'])
+        && okText('firstName', 100) && okText('lastName', 100) && okText('birthDate', 10)
+        && okText('address', 300) && okText('whatsapp', 30) && okText('contactEmail', 254)
+        && okText('avatarPreset', 2);
+    }
+
+    // Termux-opdrachten: support vraagt een vaste, alleen-lezen opdracht aan. Alleen de klant keurt goed of weigert.
+    match /termuxRequests/{reqId} {
+      allow read: if request.auth != null
+        && (resource.data.customerUid == request.auth.uid
+            || resource.data.requestedByUid == request.auth.uid);
+      allow create: if isSupport()
+        && request.resource.data.requestedByUid == request.auth.uid
+        && request.resource.data.status == 'requested'
+        && request.resource.data.commandId in ['system', 'storage', 'uptime', 'date', 'memory', 'cpu']
+        && request.resource.data.customerUid is string
+        && request.resource.data.keys().hasOnly(['customerUid', 'requestedByUid', 'commandId', 'status', 'createdAt']);
+      allow update: if request.auth != null
+        && resource.data.customerUid == request.auth.uid
+        && resource.data.status in ['requested', 'approved']
+        && request.resource.data.status in ['approved', 'denied', 'done', 'failed']
+        && request.resource.data.customerUid == resource.data.customerUid
+        && request.resource.data.requestedByUid == resource.data.requestedByUid
+        && request.resource.data.commandId == resource.data.commandId
+        && request.resource.data.keys().hasOnly(['customerUid', 'requestedByUid', 'commandId', 'status', 'createdAt', 'result'])
+        && (!('result' in request.resource.data) || (request.resource.data.result is string && request.resource.data.result.size() <= 4000));
+      allow delete: if false;
+    }
+
+    match /appCatalog/{appId} {
+      allow read: if request.auth != null;
+      allow delete: if isSupport();
+      allow create, update: if isSupport()
+        && request.resource.data.keys().hasAll(['title', 'description', 'kind', 'url', 'updatedBy', 'updatedAt'])
+        && request.resource.data.keys().hasOnly(['title', 'description', 'kind', 'url', 'updatedBy', 'updatedAt', 'iconBase64', 'packageName', 'sizeBytes', 'versionCode'])
+        && (!('versionCode' in request.resource.data) || request.resource.data.versionCode == null || (request.resource.data.versionCode is int && request.resource.data.versionCode > 0))
+        && (!('sizeBytes' in request.resource.data) || request.resource.data.sizeBytes == null || (request.resource.data.sizeBytes is int && request.resource.data.sizeBytes > 0 && request.resource.data.sizeBytes <= 536870912))
+        && (!('iconBase64' in request.resource.data) || (request.resource.data.iconBase64 is string && request.resource.data.iconBase64.size() <= 60000))
+        && (!('packageName' in request.resource.data) || (request.resource.data.packageName is string && request.resource.data.packageName.size() <= 255))
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 120
+        && request.resource.data.description is string && request.resource.data.description.size() <= 2000
+        && request.resource.data.kind in ['apk', 'mobileconfig']
+        && request.resource.data.url is string && request.resource.data.url.size() <= 2048
+        && request.resource.data.url.matches('https://[^ /]+/?.*')
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    // Versiegegevens voor de updateknop: alleen lezen voor ingelogde gebruikers. De console zet de nieuwste versie.
+    match /appConfig/{doc} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Alles wat niet expliciet is genoemd blijft dicht.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

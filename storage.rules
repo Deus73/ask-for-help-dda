@@ -1,0 +1,38 @@
+rules_version = '2';
+
+// Bestandsbijlagen bij een supportgesprek. De app uploadt naar
+// chat/{ticketId}/{tijd}-{bestandsnaam}. Alleen de klant van het gesprek
+// en supportmedewerkers mogen lezen en schrijven.
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSupport() {
+      return request.auth != null
+        && firestore.exists(/databases/(default)/documents/presence/$(request.auth.uid))
+        && firestore.get(/databases/(default)/documents/presence/$(request.auth.uid)).data.get('support', false) == true;
+    }
+
+    function isTicketParticipant(ticketId) {
+      return request.auth != null
+        && (
+          firestore.get(/databases/(default)/documents/tickets/$(ticketId)).data.customerUid == request.auth.uid
+          || isSupport()
+        );
+    }
+
+    function allowedContentType() {
+      return request.resource.contentType.matches(
+        'image/(jpeg|png|gif|webp|heic|heif)|video/(mp4|quicktime|webm)|audio/(mpeg|mp4|aac|wav)|text/plain|application/(pdf|zip|x-zip-compressed|msword|vnd.*|octet-stream)'
+      );
+    }
+
+    match /chat/{ticketId}/{fileName} {
+      allow read: if isTicketParticipant(ticketId);
+      allow create: if request.auth != null
+        && isTicketParticipant(ticketId)
+        && request.resource.size <= 50 * 1024 * 1024
+        && allowedContentType();
+      allow update: if false;
+      allow delete: if isTicketParticipant(ticketId);
+    }
+  }
+}

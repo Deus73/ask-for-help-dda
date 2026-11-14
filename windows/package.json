@@ -1,0 +1,19 @@
+{
+  "name": "ask-for-help",
+  "version": "0.1.0",
+  "description": "ASK FOR HELP, klant-app voor Windows",
+  "private": true,
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.cjs",
+    "test:ui": "node test/ui.cjs",
+    "build": "node build.cjs",
+    "build:linux": "node build-linux.cjs"
+  },
+  "devDependencies": {
+    "electron": "45.3.1",
+    "electron-builder": "26.18.0",
+    "playwright": "1.65.0"
+  }
+}

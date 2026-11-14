@@ -1,0 +1,6 @@
+{
+  "name": "dda-firebase-tests",
+  "private": true,
+  "scripts": { "test": "node --test rules.test.cjs" },
+  "devDependencies": { "@firebase/rules-unit-testing": "6.0.0", "firebase": "13.3.0" }
+}

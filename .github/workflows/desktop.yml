@@ -1,0 +1,51 @@
+name: Desktop bouwen en publiceren
+on:
+  workflow_dispatch:
+  push:
+    tags: ['desktop-v*']
+permissions:
+  contents: write
+concurrency:
+  group: publish-downloads
+  cancel-in-progress: false
+jobs:
+  desktop:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+      - run: npm ci
+        working-directory: windows
+      - run: node node_modules/electron/install.js
+        working-directory: windows
+      - name: Sandbox voorbereiden en bediening testen
+        working-directory: windows
+        run: |
+          sudo chown root node_modules/electron/dist/chrome-sandbox
+          sudo chmod 4755 node_modules/electron/dist/chrome-sandbox
+          npm test
+          xvfb-run -a npm run test:ui
+      - run: node --test ios/test/*.test.cjs
+      - name: Portable EXE en Linux DEB bouwen
+        working-directory: windows
+        run: |
+          npm run build
+          npm run build:linux
+      - name: Verzamel en publiceer per OS
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p downloads
+          cp build/windows/ASK-FOR-HELP-Portable-*.exe downloads/
+          cp build/linux/ASK-FOR-HELP-*-amd64.deb downloads/
+          python3 tools/sync-downloads.py --desktop-dir downloads
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.md versions.json
+          if ! git diff --cached --quiet; then git commit -m 'Publiceer actuele desktopdownloads'; git push; fi
