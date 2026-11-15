@@ -10,14 +10,14 @@ Downloadpagina en bronbestanden voor ASK FOR HELP / DDA SUPPORT.
 
 | Platform | App | Versie | Status |
 | --- | --- | --- | --- |
-| Android | ASK FOR HELP (klant) | 0.20.0 (build 25) | Gepubliceerd 15 november 2026 |
+| Android | ASK FOR HELP (klant) | 0.21.0 (build 26) | Gepubliceerd 15 november 2026 |
 | Android | DDA SUPPORT (medewerker) | 0.15.0 (build 18) | Gepubliceerd 15 november 2026 |
 | Windows | ASK FOR HELP (portable EXE) | 0.1.2 | Gepubliceerd 15 november 2026, proefversie |
 | Linux | ASK FOR HELP (DEB, amd64) | 0.1.2 | Gepubliceerd 15 november 2026, proefversie |
 | Samsung TV (Tizen) | ASK FOR HELP TV (WGT) | 0.1.2 | Gepubliceerd 15 november 2026, niet ondertekend |
 | Apple | Webapp / profiel | — | Geen openbare IPA/TestFlight; toegang via persoonlijk certificaat |
 
-Nieuw in deze versies: aparte Shizuku-sectie in Profiel met officiële RikkaApps-bronnen (download/GitHub), installatiedetectie en duidelijke toelichting — geen automatische installatie, update, beta of de-installatie. Eerdere verbeteringen: delen van app-bestanden direct naar “App of profiel toevoegen”, directe upload, snelle chatberichten, chat-achtergrond, Home-contactknop, kleinere builds.
+Nieuw (ASK FOR HELP 0.21.0): verbeterde Shizuku-sectie met pakket/versie/installatiebron en controle-instructies (alleen officiële RikkaApps-bronnen, geen automatische installatie/update/beta/de-installatie). DDA SUPPORT 0.15.0 ongewijzigd. Eerdere verbeteringen: delen van app-bestanden direct naar “App of profiel toevoegen”, directe upload, snelle chatberichten, chat-achtergrond, Home-contactknop, kleinere builds.
 
 ## Inhoud van deze repository
 
