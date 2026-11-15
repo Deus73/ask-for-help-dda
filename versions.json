@@ -1,46 +1,44 @@
 {
   "android_customer": {
-    "version": "0.15.0",
-    "code": 20,
-    "title": "ASK FOR HELP 0.15.0",
-    "date": "2026-11-14",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/v0.15.0",
-    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.15.0/ASK-HELP-DDA-0.15.0.apk",
-    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.15.0/ASK-HELP-DDA-0.15.0-arm64-v8a.apk",
-    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.15.0/ASK-HELP-DDA-0.15.0-armeabi-v7a.apk",
-    "x64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.15.0/ASK-HELP-DDA-0.15.0-x86_64.apk"
+    "version": "0.17.0",
+    "code": 22,
+    "title": "ASK FOR HELP 0.17.0",
+    "date": "2026-11-15",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/v0.17.0",
+    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.17.0/ASK-HELP-DDA-0.17.0.apk",
+    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.17.0/ASK-HELP-DDA-0.17.0-arm64-v8a.apk",
+    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.17.0/ASK-HELP-DDA-0.17.0-armeabi-v7a.apk"
   },
   "android_staff": {
-    "version": "0.10.0",
-    "code": 13,
-    "title": "DDA SUPPORT 0.10.0",
-    "date": "2026-11-14",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/staff-v0.10.0",
-    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.10.0/DDA-SUPPORT-0.10.0.apk",
-    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.10.0/DDA-SUPPORT-0.10.0-arm64-v8a.apk",
-    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.10.0/DDA-SUPPORT-0.10.0-armeabi-v7a.apk",
-    "x64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.10.0/DDA-SUPPORT-0.10.0-x86_64.apk"
+    "version": "0.12.0",
+    "code": 15,
+    "title": "DDA SUPPORT 0.12.0",
+    "date": "2026-11-15",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/staff-v0.12.0",
+    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.12.0/DDA-SUPPORT-0.12.0.apk",
+    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.12.0/DDA-SUPPORT-0.12.0-arm64-v8a.apk",
+    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.12.0/DDA-SUPPORT-0.12.0-armeabi-v7a.apk"
   },
   "windows": {
-    "version": "0.1.0",
-    "title": "ASK FOR HELP 0.1.0 (Windows)",
-    "date": "2026-11-14",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/windows-v0.1.0",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/windows-v0.1.0/ASK-FOR-HELP-Portable-0.1.0.exe"
+    "version": "0.1.2",
+    "title": "ASK FOR HELP 0.1.2 (Windows)",
+    "date": "2026-11-15",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/windows-v0.1.2",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/windows-v0.1.2/ASK-FOR-HELP-Portable-0.1.2.exe"
   },
   "linux": {
-    "version": "0.1.0",
-    "title": "ASK FOR HELP 0.1.0 (Linux)",
-    "date": "2026-11-14",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/linux-v0.1.0",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/linux-v0.1.0/ASK-FOR-HELP-0.1.0-amd64.deb"
+    "version": "0.1.2",
+    "title": "ASK FOR HELP 0.1.2 (Linux)",
+    "date": "2026-11-15",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/linux-v0.1.2",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/linux-v0.1.2/ASK-FOR-HELP-0.1.2-amd64.deb"
   },
   "tizen": {
-    "version": "0.1.0",
-    "title": "ASK HELP DDA TV 0.1.0 (Samsung TV / Tizen)",
-    "date": "2026-11-12",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/tizen-v0.1.0",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tizen-v0.1.0/ASK-HELP-DDA-TV-0.1.0.wgt"
+    "version": "0.1.2",
+    "title": "ASK FOR HELP 0.1.2 (Samsung TV / Tizen)",
+    "date": "2026-11-15",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/tizen-v0.1.2",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tizen-v0.1.2/ASK-HELP-DDA-TV-0.1.2.wgt"
   },
   "apple": {
     "status": "Geen openbare IPA/TestFlight. Webclient beschikbaar na persoonlijk certificaat en Firebase-aanmelding.",
