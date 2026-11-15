@@ -10,14 +10,14 @@ Downloadpagina en bronbestanden voor ASK FOR HELP / DDA SUPPORT.
 
 | Platform | App | Versie | Status |
 | --- | --- | --- | --- |
-| Android | ASK FOR HELP (klant) | 0.15.0 (build 20) | Gepubliceerd 14 november 2026 |
-| Android | DDA SUPPORT (medewerker) | 0.10.0 (build 13) | Gepubliceerd 14 november 2026 |
-| Windows | ASK FOR HELP (portable EXE) | 0.1.0 | Gepubliceerd 14 november 2026, proefversie |
-| Linux | ASK FOR HELP (DEB, amd64) | 0.1.0 | Gepubliceerd 14 november 2026, proefversie |
-| Samsung TV (Tizen) | ASK HELP DDA TV (WGT) | 0.1.0 | Gepubliceerd 12 november 2026, niet ondertekend |
+| Android | ASK FOR HELP (klant) | 0.18.0 (build 23) | Gepubliceerd 15 november 2026 |
+| Android | DDA SUPPORT (medewerker) | 0.13.0 (build 16) | Gepubliceerd 15 november 2026 |
+| Windows | ASK FOR HELP (portable EXE) | 0.1.2 | Gepubliceerd 15 november 2026, proefversie |
+| Linux | ASK FOR HELP (DEB, amd64) | 0.1.2 | Gepubliceerd 15 november 2026, proefversie |
+| Samsung TV (Tizen) | ASK FOR HELP TV (WGT) | 0.1.2 | Gepubliceerd 15 november 2026, niet ondertekend |
 | Apple | Webapp / profiel | — | Geen openbare IPA/TestFlight; toegang via persoonlijk certificaat |
 
-De nieuwste Android-versies bevatten kleinere/gesplitste APK-builds, update-meldingen en verbeteringen aan chat, app-catalogus en TV-berichten.
+Nieuw in deze versies: bij “App toevoegen” wordt een gekozen bestand direct geüpload en de downloadlink automatisch ingevuld (Google Drive), en ASK FOR HELP/DDA SUPPORT zijn te selecteren als deeldoel in het Android-deelmenu. Eerdere verbeteringen: snelle chatberichten, chat-achtergrond, Home-contactknop, kleinere builds.
 
 ## Inhoud van deze repository
 
