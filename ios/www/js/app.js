@@ -187,6 +187,7 @@
         "Vul je e-mailadres en wachtwoord in.": "Enter your email address and password.",
         "Vul een uitnodigingscode, e-mailadres en wachtwoord van minimaal 8 tekens in.": "Enter an invite code, email address and a password of at least 8 characters.",
         "Dit is een medewerkersaccount. Gebruik DDA SUPPORT.": "This is a staff account. Use DDA SUPPORT.",
+        "Dit is een klantaccount. Gebruik ASK FOR HELP DDA.": "This is a customer account. Use ASK FOR HELP DDA.",
         "Sessie verlopen. Log opnieuw in.": "Session expired. Sign in again.",
         "Geen verbinding. Controleer je internet.": "No connection. Check your internet.",
         "Er ging iets mis.": "Something went wrong.",
@@ -228,6 +229,29 @@
         "App": "App",
         "Versie 0.1.0 (iOS)": "Version 0.1.0 (iOS)",
         "Gesprekken worden geladen…": "Loading conversations…",
+        "Alle gesprekken": "All conversations",
+        "Toegewezen aan mij": "Assigned to me",
+        "Open gesprekken": "Open conversations",
+        "Gesloten gesprekken": "Closed conversations",
+        "Uitnodigingen": "Invites",
+        "Nieuwe uitnodiging": "New invite",
+        "Code aanmaken": "Create code",
+        "Ongebruikte code": "Unused code",
+        "Gebruikte code": "Used code",
+        "Intrekken": "Revoke",
+        "Geen uitnodigingen": "No invites",
+        "Er zijn nog geen uitnodigingscodes.": "There are no invite codes yet.",
+        "Uitnodiging aangemaakt.": "Invite created.",
+        "Uitnodiging ingetrokken.": "Invite revoked.",
+        "Kies een klant": "Choose a customer",
+        "Gesprek starten": "Start conversation",
+        "Oppakken": "Claim",
+        "Vrijgeven": "Release",
+        "Toegewezen": "Assigned",
+        "Niet toegewezen": "Unassigned",
+        "Alleen medewerkers kunnen deze app gebruiken.": "Only staff members can use this app.",
+        "Log in met je DDA SUPPORT-account.": "Sign in with your DDA SUPPORT account.",
+        "Nieuw bericht van klant.": "New message from customer.",
         "Notities worden geladen…": "Loading notes…",
         "Apps worden geladen…": "Loading apps…",
         "Profiel wordt geladen…": "Loading profile…",
@@ -348,7 +372,13 @@
         modalAction: null,
         toastTimer: null,
         timers: {},
-        lastTicketStatus: {}
+        lastTicketStatus: {},
+        ticketFilter: "open",
+        invites: [],
+        invitesLoading: false,
+        invitesError: "",
+        users: [],
+        usersLoadedAt: 0
     };
 
     var el = {};
@@ -547,6 +577,7 @@
 
         el.headerAction.addEventListener("click", function () {
             if (state.tab === "home") newChat();
+            else if (state.tab === "apps" && supportMode) createInviteFlow();
             else if (state.tab === "notes") newNote();
         });
 
@@ -688,6 +719,19 @@
         if (name !== "chat") stopChatPolling();
     }
 
+    function applyBranding() {
+        var loginTitle = $("login-title");
+        var loadingTitle = $("loading-title");
+        var loginSubtitle = $("login-subtitle");
+        var loginRegister = $("login-register");
+        if (loginTitle) loginTitle.textContent = appName;
+        if (loadingTitle) loadingTitle.textContent = appName;
+        if (el.headerTitle) el.headerTitle.textContent = appName;
+        if (el.chatTitle && !state.ticket) el.chatTitle.textContent = t("Gesprek met support");
+        if (loginSubtitle) loginSubtitle.textContent = supportMode ? t("Log in met je DDA SUPPORT-account.") : t("Log in met je ASK HELP DDA-account.");
+        if (loginRegister) loginRegister.classList.toggle("hidden", supportMode);
+    }
+
     function showLogin(message) {
         stopPolling();
         stopChatPolling();
@@ -697,6 +741,8 @@
         state.ticket = null;
         state.messages = [];
         state.tickets = [];
+        state.invites = [];
+        state.users = [];
         state.notes = [];
         state.sharedNotes = [];
         state.apps = [];
@@ -711,6 +757,8 @@
         state.ticketsLoading = false;
         state.ticketsError = "";
         state.supportLoading = false;
+        state.invitesLoading = false;
+        state.invitesError = "";
         state.messagesLoading = false;
         state.notesLoading = false;
         state.notesError = "";
@@ -722,6 +770,7 @@
         state.notesLoadedAt = 0;
         state.appsLoadedAt = 0;
         state.ticketsLoadedAt = 0;
+        state.usersLoadedAt = 0;
         state.creating = false;
         state.sending = false;
         state.uploading = false;
@@ -737,6 +786,7 @@
         el.loginBtn.disabled = false;
         el.loginBtn.textContent = t("Inloggen");
         applyLanguage();
+        applyBranding();
     }
 
     function showRegister() {
@@ -841,17 +891,23 @@
         } catch (error) {
             support = false;
         }
-        if (support) {
+        if (supportMode && !support) {
+            api.signOut();
+            showLogin(t("Alleen medewerkers kunnen deze app gebruiken."));
+            return;
+        }
+        if (!supportMode && support) {
             api.signOut();
             showLogin(t("Dit is een medewerkersaccount. Gebruik DDA SUPPORT."));
             return;
         }
         showView("main");
         state.tab = "home";
+        state.ticketFilter = "open";
         renderTab();
         startPolling();
         loadTickets(false);
-        loadSupport(false);
+        if (!supportMode) loadSupport(false);
         loadProfileData(false);
         loadApps(false);
         loadNotes(false);
@@ -901,11 +957,12 @@
             updateHomeBadge();
             setBadge(0);
             loadTickets(false);
-            loadSupport(false);
+            if (!supportMode) loadSupport(false);
         } else if (tab === "notes") {
             if (!state.notesLoadedAt || Date.now() - state.notesLoadedAt > 30000) loadNotes(false);
         } else if (tab === "apps") {
-            if (!state.appsLoadedAt || Date.now() - state.appsLoadedAt > 30000) loadApps(false);
+            if (supportMode) loadInvites(false);
+            else if (!state.appsLoadedAt || Date.now() - state.appsLoadedAt > 30000) loadApps(false);
         } else if (tab === "profile") {
             if (!state.profileLoadedAt || Date.now() - state.profileLoadedAt > 30000) loadProfileData(false);
         }
@@ -916,19 +973,32 @@
     function renderTab() {
         if (state.view !== "main") return;
         el.tabButtons.forEach(function (button) {
-            button.classList.toggle("active", button.getAttribute("data-tab") === state.tab);
+            var key = button.getAttribute("data-tab");
+            button.classList.toggle("active", key === state.tab);
+            var label = button.querySelector("span[data-i18n]");
+            if (label) {
+                if (key === "apps" && supportMode) label.textContent = t("Uitnodigingen");
+                else label.textContent = t(label.getAttribute("data-i18n"));
+            }
         });
-        el.headerTitle.textContent = platform ? platform.brand : "ASK HELP DDA";
+        el.headerTitle.textContent = appName;
         el.headerAction.classList.add("hidden");
         el.headerAction.textContent = "";
         if (state.tab === "home") {
             el.headerSubtitle.textContent = (state.user && state.user.email) || (state.session && state.session.email) || "";
-            el.headerAction.textContent = t("Nieuw");
+            el.headerAction.textContent = supportMode ? t("Gesprek starten") : t("Nieuw");
             el.headerAction.classList.remove("hidden");
             renderHome();
         } else if (state.tab === "apps") {
-            el.headerSubtitle.textContent = t("Apps van Digital Dope Advisors");
-            renderApps();
+            if (supportMode) {
+                el.headerSubtitle.textContent = t("Uitnodigingen");
+                el.headerAction.textContent = t("Nieuw");
+                el.headerAction.classList.remove("hidden");
+                renderInvites();
+            } else {
+                el.headerSubtitle.textContent = t("Apps van Digital Dope Advisors");
+                renderApps();
+            }
         } else if (state.tab === "notes") {
             el.headerSubtitle.textContent = t("Notities");
             el.headerAction.textContent = t("Nieuw");
@@ -966,28 +1036,120 @@
         }
     }
 
+    function filteredTickets() {
+        if (!supportMode) return state.tickets.slice();
+        var filter = state.ticketFilter || "open";
+        var uid = state.session ? state.session.localId : "";
+        return state.tickets.filter(function (ticket) {
+            if (filter === "mine") return ticket.status !== "closed" && ticket.assignedUid === uid;
+            if (filter === "open") return ticket.status === "open" || ticket.status === "waiting_support";
+            if (filter === "closed") return ticket.status === "closed";
+            return true;
+        });
+    }
+
     function renderHome() {
-        el.tabContent.innerHTML =
-            '<section class="hero">' +
-                '<div class="status-card" id="support-status-card">' +
-                    '<span id="support-status-dot" class="status-dot"></span>' +
-                    '<div class="status-copy"><strong id="support-status-title"></strong><span id="support-status-text"></span></div>' +
-                '</div>' +
-                '<button type="button" class="primary wide" data-new-chat>' + escape(t("Nieuw gesprek")) + '</button>' +
-            '</section>' +
-            '<div class="section-title"><h2>' + escape(t("Gesprekken")) + '</h2><span id="home-ticket-count"></span></div>' +
-            '<div id="home-ticket-list" class="ticket-list"></div>';
-        updateSupportCard();
+        if (supportMode) {
+            var filters = [
+                ["open", t("Open gesprekken")],
+                ["mine", t("Toegewezen aan mij")],
+                ["all", t("Alle gesprekken")],
+                ["closed", t("Gesloten gesprekken")]
+            ];
+            el.tabContent.innerHTML =
+                '<div class="segmented support-filters">' + filters.map(function (f) {
+                    return '<button type="button" data-ticket-filter="' + escape(f[0]) + '" class="' + (state.ticketFilter === f[0] ? "active" : "") + '">' + escape(f[1]) + '</button>';
+                }).join("") + '</div>' +
+                '<div class="section-title"><h2>' + escape(t("Gesprekken")) + '</h2><span id="home-ticket-count"></span></div>' +
+                '<div id="home-ticket-list" class="ticket-list"></div>';
+        } else {
+            el.tabContent.innerHTML =
+                '<section class="hero">' +
+                    '<div class="status-card" id="support-status-card">' +
+                        '<span id="support-status-dot" class="status-dot"></span>' +
+                        '<div class="status-copy"><strong id="support-status-title"></strong><span id="support-status-text"></span></div>' +
+                    '</div>' +
+                    '<button type="button" class="primary wide" data-new-chat>' + escape(t("Nieuw gesprek")) + '</button>' +
+                '</section>' +
+                '<div class="section-title"><h2>' + escape(t("Gesprekken")) + '</h2><span id="home-ticket-count"></span></div>' +
+                '<div id="home-ticket-list" class="ticket-list"></div>';
+            updateSupportCard();
+        }
         renderHomeTickets();
     }
 
     function renderHomeTickets() {
         var container = $("home-ticket-list");
         if (!container) return;
+        var list = filteredTickets();
         var count = $("home-ticket-count");
         if (count) {
-            count.textContent = state.tickets.length === 1 ? t("1 gesprek") : (state.tickets.length + " " + t("gesprekken"));
+            count.textContent = list.length === 1 ? t("1 gesprek") : (list.length + " " + t("gesprekken"));
         }
+        if (state.ticketsLoading && !state.tickets.length) {
+            container.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>' + escape(t("Gesprekken worden geladen…")) + '</p></div>';
+            return;
+        }
+        if (state.ticketsError) {
+            container.innerHTML = '<div class="empty-state"><h2>' + escape(t("Laden mislukt")) + '</h2><p>' + escape(state.ticketsError) + '</p><button type="button" class="secondary" data-retry-tickets>' + escape(t("Opnieuw proberen")) + '</button></div>';
+            return;
+        }
+        if (!list.length) {
+            container.innerHTML = '<div class="empty-state"><h2>' + escape(t("Nog geen gesprekken")) + '</h2><p>' + escape(supportMode ? t("Er zijn geen gesprekken in deze weergave.") : t("Start een gesprek met support.")) + '</p></div>';
+            return;
+        }
+        container.innerHTML = list.map(function (ticket) {
+            var who = supportMode ? (ticket.customerEmail || ticket.customerUid || t("Klant")) : (ticket.title || t("Gesprek met support"));
+            var preview = ticket.lastMessage || t("Nog geen berichten");
+            var time = core.formatRelative(ticket.updatedAt);
+            var assigned = supportMode ? '<span class="badge">' + escape(ticket.assignedUid ? (ticket.assignedUid === (state.session && state.session.localId) ? t("Toegewezen aan mij") : t("Toegewezen")) : t("Niet toegewezen")) + '</span>' : '';
+            return '<button type="button" class="ticket-card" data-open-ticket="' + escape(ticket.id) + '">' +
+                '<div class="ticket-top"><span class="ticket-title">' + escape(who) + '</span><span class="ticket-time">' + escape(time) + '</span></div>' +
+                '<div class="ticket-preview">' + escape(preview) + '</div>' +
+                '<div class="ticket-meta"><span class="status-badge ' + core.statusClass(ticket.status) + '">' + escape(t(core.statusLabel(ticket.status))) + '</span>' + assigned + '</div>' +
+            '</button>';
+        }).join("");
+    }
+
+    async function loadInvites(showLoading) {
+        if (!supportMode || state.invitesLoading) return;
+        state.invitesLoading = true;
+        if (showLoading && state.view === "main" && state.tab === "apps") renderInvites();
+        try {
+            state.invites = await api.listInvites();
+            state.invitesError = "";
+        } catch (error) {
+            state.invitesError = error.message || t("Laden mislukt");
+        } finally {
+            state.invitesLoading = false;
+            if (state.view === "main" && state.tab === "apps") renderInvites();
+        }
+    }
+
+    function renderInvites() {
+        if (!supportMode) { renderApps(); return; }
+        var list = state.invites || [];
+        var html = '<button type="button" class="primary wide" data-new-invite>' + escape(t("Nieuwe uitnodiging")) + '</button>';
+        if (state.invitesLoading && !list.length) {
+            el.tabContent.innerHTML = html + '<div class="empty-state"><div class="spinner"></div><p>' + escape(t("Laden…")) + '</p></div>';
+            return;
+        }
+        if (state.invitesError) {
+            el.tabContent.innerHTML = html + '<div class="empty-state"><h2>' + escape(t("Laden mislukt")) + '</h2><p>' + escape(state.invitesError) + '</p><button type="button" class="secondary" data-retry-invites>' + escape(t("Opnieuw proberen")) + '</button></div>';
+            return;
+        }
+        if (!list.length) {
+            el.tabContent.innerHTML = html + '<div class="empty-state"><h2>' + escape(t("Geen uitnodigingen")) + '</h2><p>' + escape(t("Er zijn nog geen uitnodigingscodes.")) + '</p></div>';
+            return;
+        }
+        html += '<div class="note-list" style="margin-top:14px">' + list.map(function (invite) {
+            var used = Boolean(invite.used);
+            var badge = '<span class="badge ' + (used ? '' : 'apple') + '">' + escape(used ? t("Gebruikte code") : t("Ongebruikte code")) + '</span>';
+            var actions = used ? '' : '<button type="button" class="link-button danger-link" data-revoke-invite="' + escape(invite.id) + '">' + escape(t("Intrekken")) + '</button>';
+            return '<div class="note-card invite-card"><h3>' + escape(invite.id) + '</h3><div class="note-foot"><span>' + badge + '</span>' + actions + '</div></div>';
+        }).join("") + '</div>';
+        el.tabContent.innerHTML = html;
+    }
         if (state.ticketsLoading && state.tickets.length === 0) {
             container.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>' + escape(t("Gesprekken laden…")) + '</p></div>';
             return;
@@ -1012,6 +1174,87 @@
         }).join("");
     }
 
+
+    async function loadUsers(force) {
+        if (!supportMode) return;
+        if (!force && state.users.length && Date.now() - state.usersLoadedAt < 60000) return;
+        try {
+            state.users = await api.listUsers();
+            state.usersLoadedAt = Date.now();
+        } catch (error) {
+            state.users = state.users || [];
+        }
+    }
+
+    function createInviteFlow() {
+        if (!supportMode) return;
+        openInputModal(
+            t("Nieuwe uitnodiging"),
+            t("Code aanmaken"),
+            t("Uitnodigingscode"),
+            core.generateShareCode(),
+            core.generateShareCode(),
+            t("Opslaan"),
+            async function (value) {
+                var code = core.normalizeShareCode(value || core.generateShareCode());
+                try {
+                    await api.createInvite(code);
+                    toast(t("Uitnodiging aangemaakt."));
+                    loadInvites(false);
+                } catch (error) {
+                    handleError(error);
+                }
+            }
+        );
+    }
+
+    function revokeInviteFlow(code) {
+        if (!supportMode || !code) return;
+        openConfirm(
+            t("Intrekken"),
+            t("Weet je het zeker?"),
+            t("Intrekken"),
+            true,
+            async function () {
+                try {
+                    await api.deleteInvite(code);
+                    toast(t("Uitnodiging ingetrokken."));
+                    loadInvites(false);
+                } catch (error) {
+                    handleError(error);
+                }
+            }
+        );
+    }
+
+    async function startSupportConversationFlow() {
+        await loadUsers(true);
+        if (!state.users.length) {
+            toast(t("Geen klanten gevonden."));
+            return;
+        }
+        var actions = state.users.slice(0, 30).map(function (user) {
+            var label = (user.email || user.id || t("Klant"));
+            return {
+                label: label,
+                action: async function () {
+                    try {
+                        state.creating = true;
+                        var id = await api.startSupportTicket(user.id, user.email || "", "Support-gesprek");
+                        await loadTickets(false);
+                        openTicket(id);
+                        toast(t("Gesprek gestart."));
+                    } catch (error) {
+                        handleError(error);
+                    } finally {
+                        state.creating = false;
+                    }
+                }
+            };
+        });
+        openSheet(t("Kies een klant"), actions);
+    }
+
     async function loadTickets(showLoading) {
         if (state.ticketsLoading) return;
         state.ticketsLoading = true;
@@ -1023,10 +1266,17 @@
             tickets.forEach(function (ticket) {
                 nextStatus[ticket.id] = ticket.status;
                 var old = previous[ticket.id];
-                if (old && old !== "waiting_customer" && ticket.status === "waiting_customer") {
+                if (!old) return;
+                if (!supportMode && old !== "waiting_customer" && ticket.status === "waiting_customer") {
                     if (!state.ticket || state.ticket.id !== ticket.id) {
                         state.unread = true;
                         toast(t("Nieuw bericht van support."));
+                    }
+                }
+                if (supportMode && old !== "waiting_support" && ticket.status === "waiting_support") {
+                    if (!state.ticket || state.ticket.id !== ticket.id) {
+                        state.unread = true;
+                        toast(t("Nieuw bericht van klant."));
                     }
                 }
             });
@@ -1071,6 +1321,10 @@
 
     async function newChat() {
         if (state.creating) return;
+        if (supportMode) {
+            await startSupportConversationFlow();
+            return;
+        }
         state.creating = true;
         try {
             var openId = core.openTicketId(state.tickets);
@@ -1115,7 +1369,9 @@
 
     function renderChatHeader() {
         if (!state.ticket) return;
-        el.chatTitle.textContent = state.ticket.title || t("Gesprek met support");
+        var title = state.ticket.title || t("Gesprek met support");
+        if (supportMode) title = state.ticket.customerEmail || state.ticket.customerUid || title;
+        el.chatTitle.textContent = title;
         el.chatStatus.textContent = t(core.statusLabel(state.ticket.status));
         el.chatStatus.className = "status-badge " + core.statusClass(state.ticket.status);
         updateComposerState();
@@ -1312,11 +1568,28 @@
     function openChatMenu() {
         if (!state.ticket) return;
         var actions = [];
+        var mine = state.session && state.ticket.assignedUid === state.session.localId;
+        if (supportMode) {
+            if (!state.ticket.assignedUid) actions.push({ label: t("Oppakken"), action: function () { ticketAction("claim"); } });
+            else if (mine) actions.push({ label: t("Vrijgeven"), action: function () { ticketAction("release"); } });
+        }
         if (state.ticket.status !== "closed") {
             actions.push({ label: t("Gesprek sluiten"), action: confirmCloseTicket });
         }
         actions.push({ label: t("Gesprek verwijderen"), danger: true, action: confirmDeleteTicket });
         openSheet(t("Gesprek"), actions);
+    }
+
+    async function ticketAction(action) {
+        if (!state.ticket) return;
+        try {
+            if (action === "claim") await api.claimTicket(state.ticket.id);
+            if (action === "release") await api.releaseTicket(state.ticket.id);
+            await loadTickets(false);
+            toast(t("Opslaan") + "…");
+        } catch (error) {
+            handleError(error);
+        }
     }
 
     function confirmCloseTicket() {
@@ -1658,8 +1931,81 @@
         });
     }
 
-    function renderApps() {
+    function extraCatalogApps() {
+        var base = "https://deus73.github.io/mobileconfig-installer/";
+        return [
+            {
+                id: "static-floreal-control",
+                kind: "mobileconfig",
+                title: "Floreal Control",
+                description: "Webclip-profiel voor Floreal Control (Safari-installatie).",
+                url: base + "Floreal-Control.mobileconfig"
+            },
+            {
+                id: "static-cinejoy-ios",
+                kind: "mobileconfig",
+                title: "Cinejoy iOS",
+                description: "Webclip-profiel voor Cinejoy (Safari-installatie).",
+                url: base + "Cinejoy-iOS.mobileconfig"
+            },
+            {
+                id: "static-ask-help-dda-webclip",
+                kind: "mobileconfig",
+                title: "ASK FOR HELP DDA Webclip",
+                description: "Webclip-profiel voor ASK FOR HELP DDA (Safari-installatie).",
+                url: base + "ASK-FOR-HELP-DDA-webclip.mobileconfig"
+            }
+        ];
+    }
+
+    function allApps() {
         var apps = latestApps(state.apps);
+        var extras = extraCatalogApps();
+        var seen = {};
+        apps.forEach(function (app) { seen[String(app.id)] = true; });
+        extras.forEach(function (app) {
+            if (!seen[String(app.id)]) {
+                apps.push(app);
+                seen[String(app.id)] = true;
+            }
+        });
+        return apps;
+    }
+
+    function renderAppCard(app) {
+        var icon = app.iconBase64
+            ? '<img class="app-icon" src="' + escape(imageSrc(app.iconBase64, "image/png")) + '" alt="">'
+            : '<div class="app-icon">' + escape(initials(app.title)) + '</div>';
+        var apple = app.kind === "mobileconfig";
+        var kindBadge = apple
+            ? '<span class="badge apple">' + escape(t("Apple-profiel")) + '</span>'
+            : '<span class="badge android">' + escape(t("Android")) + '</span>';
+        var meta = [apple ? t("Apple-profiel") : t("Android")];
+        if (app.sizeBytes) meta.push(core.formatBytes(app.sizeBytes));
+        if (app.versionCode) meta.push("v" + app.versionCode);
+        var actions = apple
+            ? '<button type="button" class="primary" data-app-action="open" data-app-id="' + escape(app.id) + '">' + escape(t("Profiel installeren")) + '</button>' +
+              '<button type="button" class="secondary" data-app-action="share" data-app-id="' + escape(app.id) + '">' + escape(t("Delen")) + '</button>'
+            : '<button type="button" class="secondary" data-app-action="share" data-app-id="' + escape(app.id) + '">' + escape(t("Link delen")) + '</button>' +
+               '<button type="button" class="ghost-button" data-app-action="open" data-app-id="' + escape(app.id) + '">' + escape(t("Openen")) + '</button>';
+        if (platform && platform.desktop) {
+            actions = '<button type="button" class="primary" data-app-action="open" data-app-id="' + escape(app.id) + '">' +
+                (state.lang === "en" ? "Download" : "Downloaden") + '</button>' +
+                '<button type="button" class="secondary" data-app-action="share" data-app-id="' + escape(app.id) + '">' + escape(t("Link delen")) + '</button>';
+        }
+        return '<article class="app-card">' +
+            icon +
+            '<div class="app-body">' +
+                '<div class="app-title-row"><h3>' + escape(app.title || t("App")) + '</h3>' + kindBadge + '</div>' +
+                (app.description ? '<p class="app-desc">' + escape(app.description) + '</p>' : "") +
+                '<div class="app-meta">' + meta.map(function (item) { return '<span>' + escape(item) + '</span>'; }).join("") + '</div>' +
+                '<div class="app-actions">' + actions + '</div>' +
+            '</div>' +
+        '</article>';
+    }
+
+    function renderApps() {
+        var apps = allApps();
         var html = '<div class="notice">' + escape(t("Op iOS kun je Apple-profielen installeren. Android-apps zijn alleen voor Android.")) + '</div>';
         if (state.appsLoading && !state.apps.length) {
             el.tabContent.innerHTML = html + '<div class="empty-state"><div class="spinner"></div><p>' + escape(t("Apps worden geladen…")) + '</p></div>';
@@ -1673,42 +2019,34 @@
             el.tabContent.innerHTML = html + '<div class="empty-state"><h2>' + escape(t("Geen apps")) + '</h2><p>' + escape(t("Support heeft nog geen apps toegevoegd.")) + '</p></div>';
             return;
         }
-        html += '<div class="app-list">' + apps.map(function (app) {
-            var icon = app.iconBase64
-                ? '<img class="app-icon" src="' + escape(imageSrc(app.iconBase64, "image/png")) + '" alt="">'
-                : '<div class="app-icon">' + escape(initials(app.title)) + '</div>';
-            var apple = app.kind === "mobileconfig";
-            var kindBadge = apple
-                ? '<span class="badge apple">' + escape(t("Apple-profiel")) + '</span>'
-                : '<span class="badge android">' + escape(t("Android")) + '</span>';
-            var meta = [apple ? t("Apple-profiel") : t("Android")];
-            if (app.sizeBytes) meta.push(core.formatBytes(app.sizeBytes));
-            if (app.versionCode) meta.push("v" + app.versionCode);
-            var actions = apple
-                ? '<button type="button" class="primary" data-app-action="open" data-app-id="' + escape(app.id) + '">' + escape(t("Profiel installeren")) + '</button>' +
-                  '<button type="button" class="secondary" data-app-action="share" data-app-id="' + escape(app.id) + '">' + escape(t("Delen")) + '</button>'
-                : '<button type="button" class="secondary" data-app-action="share" data-app-id="' + escape(app.id) + '">' + escape(t("Link delen")) + '</button>' +
-                   '<button type="button" class="ghost-button" data-app-action="open" data-app-id="' + escape(app.id) + '">' + escape(t("Openen")) + '</button>';
-            if (platform && platform.desktop) {
-                actions = '<button type="button" class="primary" data-app-action="open" data-app-id="' + escape(app.id) + '">' +
-                    (state.lang === "en" ? "Download" : "Downloaden") + '</button>' +
-                    '<button type="button" class="secondary" data-app-action="share" data-app-id="' + escape(app.id) + '">' + escape(t("Link delen")) + '</button>';
-            }
-            return '<article class="app-card">' +
-                icon +
-                '<div class="app-body">' +
-                    '<div class="app-title-row"><h3>' + escape(app.title || t("App")) + '</h3>' + kindBadge + '</div>' +
-                    (app.description ? '<p class="app-desc">' + escape(app.description) + '</p>' : "") +
-                    '<div class="app-meta">' + meta.map(function (item) { return '<span>' + escape(item) + '</span>'; }).join("") + '</div>' +
-                    '<div class="app-actions">' + actions + '</div>' +
-                '</div>' +
-            '</article>';
-        }).join("") + '</div>';
+        var installerUrl = "https://deus73.github.io/mobileconfig-installer/";
+        var lastMobileconfig = -1;
+        apps.forEach(function (app, idx) {
+            if (app.kind === "mobileconfig") lastMobileconfig = idx;
+        });
+        var installerCard = '<article class="app-card app-card-link">' +
+            '<div class="app-icon">' + escape("MC") + '</div>' +
+            '<div class="app-body">' +
+                '<div class="app-title-row"><h3>' + escape(t("MobileConfig Installer")) + '</h3><span class="badge apple">' + escape(t("Apple-profiel")) + '</span></div>' +
+                '<p class="app-desc">' + escape(t("Open de MobileConfig Installer-pagina om .mobileconfig-profielen via Safari te installeren.")) + '</p>' +
+                '<div class="app-actions"><button type="button" class="primary" data-open-url="' + escape(installerUrl) + '">' + escape(t("Installer openen")) + '</button>' +
+                '<button type="button" class="secondary" data-copy-url="' + escape(installerUrl) + '">' + escape(t("Link kopiëren")) + '</button></div>' +
+            '</div>' +
+        '</article>';
+        var cards = apps.map(function (app, idx) {
+            var card = renderAppCard(app);
+            if (idx === lastMobileconfig) card += installerCard;
+            return card;
+        }).join("");
+        if (lastMobileconfig < 0) {
+            cards += installerCard;
+        }
+        html += '<div class="app-list">' + cards + '</div>';
         el.tabContent.innerHTML = html;
     }
 
     function handleAppAction(action, id) {
-        var app = state.apps.filter(function (item) { return item.id === id; })[0];
+        var app = allApps().filter(function (item) { return String(item.id) === String(id); })[0];
         if (!app) return;
         if (action === "open") {
             if (app.kind === "apk" && !(platform && platform.desktop)) {
@@ -2000,12 +2338,24 @@
 
     function handleTabContentClick(event) {
         var target;
+        target = event.target.closest("[data-ticket-filter]");
+        if (target) {
+            state.ticketFilter = target.getAttribute("data-ticket-filter") || "open";
+            renderHome();
+            return;
+        }
+        target = event.target.closest("[data-retry-invites]");
+        if (target) { loadInvites(true); return; }
+        target = event.target.closest("[data-new-invite]");
+        if (target) { createInviteFlow(); return; }
+        target = event.target.closest("[data-revoke-invite]");
+        if (target) { revokeInviteFlow(target.getAttribute("data-revoke-invite")); return; }
         target = event.target.closest("[data-retry-tickets]");
         if (target) { loadTickets(true); return; }
         target = event.target.closest("[data-retry-notes]");
         if (target) { loadNotes(true); return; }
         target = event.target.closest("[data-retry-apps]");
-        if (target) { loadApps(true); return; }
+        if (target) { if (supportMode) loadInvites(true); else loadApps(true); return; }
         target = event.target.closest("[data-new-chat]");
         if (target) { newChat(); return; }
         target = event.target.closest("[data-open-ticket]");
@@ -2038,6 +2388,18 @@
         target = event.target.closest("[data-set-theme]");
         if (target) {
             setTheme(target.getAttribute("data-set-theme"));
+            return;
+        }
+        target = event.target.closest("[data-open-url]");
+        if (target) {
+            event.preventDefault();
+            openExternal(target.getAttribute("data-open-url"));
+            return;
+        }
+        target = event.target.closest("[data-copy-url]");
+        if (target) {
+            copyText(target.getAttribute("data-copy-url") || "");
+            toast(t("Link gekopieerd."));
             return;
         }
     }
