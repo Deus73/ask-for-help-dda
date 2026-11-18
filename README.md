@@ -10,14 +10,14 @@ Downloadpagina en bronbestanden voor ASK FOR HELP / DDA SUPPORT.
 
 | Platform | App | Versie | Status |
 | --- | --- | --- | --- |
-| Android | ASK FOR HELP (klant) | 0.22.0 (build 27) | Gepubliceerd 16 november 2026 |
-| Android | DDA SUPPORT (medewerker) | 0.16.0 (build 19) | Gepubliceerd 16 november 2026 |
+| Android | ASK FOR HELP (klant) | 0.23.0 (build 28) | Gepubliceerd 18 november 2026 |
+| Android | DDA SUPPORT (medewerker) | 0.17.0 (build 20) | Gepubliceerd 18 november 2026 |
 | Windows | ASK FOR HELP (portable EXE) | 0.1.2 | Gepubliceerd 15 november 2026, proefversie |
 | Linux | ASK FOR HELP (DEB, amd64) | 0.1.2 | Gepubliceerd 15 november 2026, proefversie |
 | Samsung TV (Tizen) | ASK FOR HELP TV (WGT) | 0.1.2 | Gepubliceerd 15 november 2026, niet ondertekend |
 | Apple | Webapp / profiel | — | Geen openbare IPA/TestFlight; toegang via persoonlijk certificaat |
 
-Nieuw (0.22.0/0.16.0): bij .mobileconfig-profielen in Apps/appstore een knop “Installatiehulp openen” naar https://deus73.github.io/mobileconfig-installer/ (naast bestaande profiel-/browseracties) ter ondersteuning van handmatige iOS-profielinstallatie. Eerdere verbeteringen: Shizuku-sectie met pakket/versie/installatiebron en controle-instructies (alleen officiële RikkaApps-bronnen), delen van app-bestanden direct naar “App of profiel toevoegen”, directe upload, snelle chatberichten, chat-achtergrond, Home-contactknop, kleinere builds.
+Nieuw (0.23.0/0.17.0): gecontroleerde build/compile voor beide apps, opnieuw opgebouwd en gepubliceerd. Bevat .mobileconfig-profielondersteuning in Apps/appstore met knop “Installatiehulp openen” naar https://deus73.github.io/mobileconfig-installer/ (handmatige iOS-installatie). Eerdere verbeteringen: Shizuku-sectie met officiële RikkaApps-bronnen, delen direct naar “App of profiel toevoegen”, directe upload, snelle chatberichten, chat-achtergrond, Home-contactknop.
 
 ## Inhoud van deze repository
 
