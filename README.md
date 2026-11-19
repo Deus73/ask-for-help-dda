@@ -10,14 +10,14 @@ Downloadpagina en bronbestanden voor ASK FOR HELP / DDA SUPPORT.
 
 | Platform | App | Versie | Status |
 | --- | --- | --- | --- |
-| Android | ASK FOR HELP (klant) | 0.24.0 (build 29) | Gepubliceerd 19 november 2026 |
-| Android | DDA SUPPORT (medewerker) | 0.18.0 (build 21) | Gepubliceerd 19 november 2026 |
+| Android | ASK FOR HELP (klant) | 0.25.0 (build 30) | Gepubliceerd 19 november 2026 |
+| Android | DDA SUPPORT (medewerker) | 0.19.0 (build 22) | Gepubliceerd 19 november 2026 |
 | Windows | ASK FOR HELP (portable EXE) | 0.1.2 | Gepubliceerd 15 november 2026, proefversie |
 | Linux | ASK FOR HELP (DEB, amd64) | 0.1.2 | Gepubliceerd 15 november 2026, proefversie |
 | Samsung TV (Tizen) | ASK FOR HELP TV (WGT) | 0.1.2 | Gepubliceerd 15 november 2026, niet ondertekend |
 | Apple | Webapp / profiel | — | Geen openbare IPA/TestFlight; toegang via persoonlijk certificaat |
 
-Nieuw (0.24.0/0.18.0): categorie **Android TV (APK)** in de app store, overzichtelijke Drive-mapstructuur voor catalogus-uploads (`Digital Dope Support/DDA App Store/<type>`), knop **App openen** voor geïnstalleerde apps, verbeterde APK-installatie (directe package installer waar mogelijk) en optie om app-beschrijvingen op te halen (F-Droid/Play Store/Appteka, best-effort). Inclusief eerdere verbeteringen (.mobileconfig-installatiehulp, Shizuku, delen/directe upload, chat/contact).
+Nieuw (0.25.0/0.19.0): profiel aangepast (“Termux-commando’s” binnen de Termux-sectie) en server-side fix voor opslaan van catalogusitems naar de Android TV-categorie (`apk_tv`). Inclusief recente verbeteringen (Android TV-categorie, overzichtelijke Drive-uploads, App openen, verbeterde APK-installatie, omschrijvingen ophalen best-effort, .mobileconfig-installatiehulp, Shizuku).
 
 ## Inhoud van deze repository
 
