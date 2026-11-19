@@ -1,23 +1,23 @@
 {
   "android_customer": {
-    "version": "0.27.1",
-    "code": 36,
-    "title": "ASK FOR HELP 0.27.1",
+    "version": "0.27.2",
+    "code": 37,
+    "title": "ASK FOR HELP 0.27.2",
     "date": "2026-11-19",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/v0.27.1",
-    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.1/ASK-HELP-DDA-0.27.1.apk",
-    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.1/ASK-HELP-DDA-0.27.1-arm64-v8a.apk",
-    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.1/ASK-HELP-DDA-0.27.1-armeabi-v7a.apk"
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/v0.27.2",
+    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.2/ASK-HELP-DDA-0.27.2.apk",
+    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.2/ASK-HELP-DDA-0.27.2-arm64-v8a.apk",
+    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.2/ASK-HELP-DDA-0.27.2-armeabi-v7a.apk"
   },
   "android_staff": {
-    "version": "0.21.1",
-    "code": 28,
-    "title": "DDA SUPPORT 0.21.1",
+    "version": "0.21.2",
+    "code": 29,
+    "title": "DDA SUPPORT 0.21.2",
     "date": "2026-11-19",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/staff-v0.21.1",
-    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.1/DDA-SUPPORT-0.21.1.apk",
-    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.1/DDA-SUPPORT-0.21.1-arm64-v8a.apk",
-    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.1/DDA-SUPPORT-0.21.1-armeabi-v7a.apk"
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/staff-v0.21.2",
+    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.2/DDA-SUPPORT-0.21.2.apk",
+    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.2/DDA-SUPPORT-0.21.2-arm64-v8a.apk",
+    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.2/DDA-SUPPORT-0.21.2-armeabi-v7a.apk"
   },
   "windows": {
     "version": "0.1.2",
