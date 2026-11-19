@@ -45,11 +45,11 @@
     "web": "https://help.digitaldopeadvisors.com/"
   },
   "android_tv_receiver": {
-    "version": "0.2.5",
-    "code": 7,
-    "title": "DDA TV Receiver 0.2.5",
+    "version": "0.3.0",
+    "code": 8,
+    "title": "DDA TV Receiver 0.3.0",
     "date": "2026-11-19",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/tv-v0.2.5",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tv-v0.2.5/DDA-TV-RECEIVER-0.2.5.apk"
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/tv-v0.3.0",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tv-v0.3.0/DDA-TV-RECEIVER-0.3.0.apk"
   }
 }
