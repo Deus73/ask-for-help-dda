@@ -43,5 +43,13 @@
   "apple": {
     "status": "Geen openbare IPA/TestFlight. Webclient beschikbaar na persoonlijk certificaat en Firebase-aanmelding.",
     "web": "https://help.digitaldopeadvisors.com/"
+  },
+  "android_tv_receiver": {
+    "version": "0.1.0",
+    "code": 1,
+    "title": "DDA TV Receiver 0.1.0",
+    "date": "2026-11-19",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/tv-v0.1.0",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tv-v0.1.0/DDA-TV-RECEIVER-0.1.0.apk"
   }
 }
