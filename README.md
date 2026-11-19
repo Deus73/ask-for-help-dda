@@ -10,14 +10,14 @@ Downloadpagina en bronbestanden voor ASK FOR HELP / DDA SUPPORT.
 
 | Platform | App | Versie | Status |
 | --- | --- | --- | --- |
-| Android | ASK FOR HELP (klant) | 0.25.0 (build 30) | Gepubliceerd 19 november 2026 |
-| Android | DDA SUPPORT (medewerker) | 0.19.0 (build 22) | Gepubliceerd 19 november 2026 |
+| Android | ASK FOR HELP (klant) | 0.26.0 (build 31) | Gepubliceerd 19 november 2026 |
+| Android | DDA SUPPORT (medewerker) | 0.20.0 (build 23) | Gepubliceerd 19 november 2026 |
 | Windows | ASK FOR HELP (portable EXE) | 0.1.2 | Gepubliceerd 15 november 2026, proefversie |
 | Linux | ASK FOR HELP (DEB, amd64) | 0.1.2 | Gepubliceerd 15 november 2026, proefversie |
 | Samsung TV (Tizen) | ASK FOR HELP TV (WGT) | 0.1.2 | Gepubliceerd 15 november 2026, niet ondertekend |
 | Apple | Webapp / profiel | — | Geen openbare IPA/TestFlight; toegang via persoonlijk certificaat |
 
-Nieuw (0.25.0/0.19.0): profiel aangepast (“Termux-commando’s” binnen de Termux-sectie) en server-side fix voor opslaan van catalogusitems naar de Android TV-categorie (`apk_tv`). Inclusief recente verbeteringen (Android TV-categorie, overzichtelijke Drive-uploads, App openen, verbeterde APK-installatie, omschrijvingen ophalen best-effort, .mobileconfig-installatiehulp, Shizuku).
+Nieuw (0.26.0/0.20.0): categorieën **Android Adult** en **Android Rooting**, downloadstatistieken voor alle apps zichtbaar voor alle gebruikers, dubbel bevestigen bij verwijderen uit de appstore en verwijderde apps herstellen (medewerker), automatische invulling van naam/omschrijving uit `.mobileconfig` bij upload, APKMirror als extra bron voor omschrijvingen (best-effort), verbeterde update-statusweergave na installatie/bijwerken, en achtergrondactiviteit onder **Instellingen en toestemmingen** in beide apps.
 
 ## Inhoud van deze repository
 
