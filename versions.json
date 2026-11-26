@@ -1,25 +1,25 @@
 {
   "android_customer": {
-    "version": "0.27.9",
-    "code": 44,
-    "title": "ASK FOR HELP 0.27.9",
-    "date": "2026-11-25",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/v0.27.9",
+    "version": "0.27.10",
+    "code": 45,
+    "title": "ASK FOR HELP 0.27.10",
+    "date": "2026-11-26",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/v0.27.10",
     "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.2/ASK-HELP-DDA-0.27.2.apk",
     "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.2/ASK-HELP-DDA-0.27.2-arm64-v8a.apk",
     "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.2/ASK-HELP-DDA-0.27.2-armeabi-v7a.apk",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.9/ASK-HELP-DDA-0.27.9.apk"
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.10/ASK-HELP-DDA-0.27.10.apk"
   },
   "android_staff": {
-    "version": "0.21.9",
-    "code": 36,
-    "title": "DDA SUPPORT 0.21.9",
-    "date": "2026-11-25",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/staff-v0.21.9",
+    "version": "0.21.10",
+    "code": 37,
+    "title": "DDA SUPPORT 0.21.10",
+    "date": "2026-11-26",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/staff-v0.21.10",
     "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.2/DDA-SUPPORT-0.21.2.apk",
     "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.2/DDA-SUPPORT-0.21.2-arm64-v8a.apk",
     "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.2/DDA-SUPPORT-0.21.2-armeabi-v7a.apk",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.9/DDA-SUPPORT-0.21.9.apk"
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.10/DDA-SUPPORT-0.21.10.apk"
   },
   "windows": {
     "version": "0.1.2",
@@ -47,11 +47,11 @@
     "web": "https://help.digitaldopeadvisors.com/"
   },
   "android_tv_receiver": {
-    "version": "0.3.7",
-    "code": 15,
-    "title": "DDA TV Receiver 0.3.7",
-    "date": "2026-11-25",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/tv-v0.3.7",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tv-v0.3.7/DDA-TV-RECEIVER-0.3.7.apk"
+    "version": "0.3.8",
+    "code": 16,
+    "title": "DDA TV Receiver 0.3.8",
+    "date": "2026-11-26",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/tv-v0.3.8",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tv-v0.3.8/DDA-TV-RECEIVER-0.3.8.apk"
   }
 }
