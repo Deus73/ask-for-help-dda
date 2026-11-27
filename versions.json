@@ -55,19 +55,19 @@
     "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tv-v0.3.23/DDA-TV-RECEIVER-0.3.23.apk"
   },
   "android_ask_for_me_lite": {
-    "version": "0.1.27",
-    "code": 28,
-    "title": "ASK FOR ME LITE 0.1.27",
+    "version": "0.1.28",
+    "code": 29,
+    "title": "ASK FOR ME LITE 0.1.28",
     "date": "2026-11-27",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/ask-for-me-lite-v0.1.27",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/ask-for-me-lite-v0.1.27/ASK-FOR-ME-LITE-0.1.27.apk"
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/ask-for-me-lite-v0.1.28",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/ask-for-me-lite-v0.1.28/ASK-FOR-ME-LITE-0.1.28.apk"
   },
   "android_support_lite": {
-    "version": "0.1.24",
-    "code": 25,
-    "title": "SUPPORT LITE 0.1.24",
+    "version": "0.1.25",
+    "code": 26,
+    "title": "SUPPORT LITE 0.1.25",
     "date": "2026-11-27",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/support-lite-v0.1.24",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/support-lite-v0.1.24/SUPPORT-LITE-0.1.24.apk"
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/support-lite-v0.1.25",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/support-lite-v0.1.25/SUPPORT-LITE-0.1.25.apk"
   }
 }
