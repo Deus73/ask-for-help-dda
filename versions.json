@@ -22,25 +22,25 @@
     "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.15/DDA-SUPPORT-0.21.15.apk"
   },
   "windows": {
-    "version": "0.1.2",
-    "title": "ASK FOR HELP 0.1.2 (Windows)",
-    "date": "2026-11-15",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/windows-v0.1.2",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/windows-v0.1.2/ASK-FOR-HELP-Portable-0.1.2.exe"
+    "version": "0.1.3",
+    "title": "ASK FOR HELP 0.1.3 (Windows)",
+    "date": "2026-11-27",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/windows-v0.1.3",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/windows-v0.1.3/ASK-FOR-HELP-Portable-0.1.3.exe"
   },
   "linux": {
-    "version": "0.1.2",
-    "title": "ASK FOR HELP 0.1.2 (Linux)",
-    "date": "2026-11-15",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/linux-v0.1.2",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/linux-v0.1.2/ASK-FOR-HELP-0.1.2-amd64.deb"
+    "version": "0.1.3",
+    "title": "ASK FOR HELP 0.1.3 (Linux)",
+    "date": "2026-11-27",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/linux-v0.1.3",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/linux-v0.1.3/ASK-FOR-HELP-0.1.3-amd64.deb"
   },
   "tizen": {
-    "version": "0.1.2",
-    "title": "ASK FOR HELP 0.1.2 (Samsung TV / Tizen)",
-    "date": "2026-11-15",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/tizen-v0.1.2",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tizen-v0.1.2/ASK-HELP-DDA-TV-0.1.2.wgt"
+    "version": "0.1.3",
+    "title": "ASK FOR HELP 0.1.3 (Samsung TV / Tizen)",
+    "date": "2026-11-27",
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/tizen-v0.1.3",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tizen-v0.1.3/ASK-HELP-DDA-TV-0.1.3.wgt"
   },
   "apple": {
     "status": "Geen openbare IPA/TestFlight. Webclient beschikbaar na persoonlijk certificaat en Firebase-aanmelding.",
