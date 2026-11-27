@@ -1,25 +1,25 @@
 {
   "android_customer": {
-    "version": "0.27.14",
-    "code": 49,
-    "title": "ASK FOR HELP 0.27.14",
+    "version": "0.27.15",
+    "code": 50,
+    "title": "ASK FOR HELP 0.27.15",
     "date": "2026-11-27",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/v0.27.14",
-    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.14/ASK-HELP-DDA-0.27.14.apk",
-    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.14/ASK-HELP-DDA-0.27.14-arm64-v8a.apk",
-    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.14/ASK-HELP-DDA-0.27.14-armeabi-v7a.apk",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.14/ASK-HELP-DDA-0.27.14.apk"
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/v0.27.15",
+    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.15/ASK-HELP-DDA-0.27.15.apk",
+    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.15/ASK-HELP-DDA-0.27.15-arm64-v8a.apk",
+    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.15/ASK-HELP-DDA-0.27.15-armeabi-v7a.apk",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/v0.27.15/ASK-HELP-DDA-0.27.15.apk"
   },
   "android_staff": {
-    "version": "0.21.14",
-    "code": 41,
-    "title": "DDA SUPPORT 0.21.14",
+    "version": "0.21.15",
+    "code": 42,
+    "title": "DDA SUPPORT 0.21.15",
     "date": "2026-11-27",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/staff-v0.21.14",
-    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.14/DDA-SUPPORT-0.21.14.apk",
-    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.14/DDA-SUPPORT-0.21.14-arm64-v8a.apk",
-    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.14/DDA-SUPPORT-0.21.14-armeabi-v7a.apk",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.14/DDA-SUPPORT-0.21.14.apk"
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/staff-v0.21.15",
+    "universal": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.15/DDA-SUPPORT-0.21.15.apk",
+    "arm64": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.15/DDA-SUPPORT-0.21.15-arm64-v8a.apk",
+    "armv7": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.15/DDA-SUPPORT-0.21.15-armeabi-v7a.apk",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/staff-v0.21.15/DDA-SUPPORT-0.21.15.apk"
   },
   "windows": {
     "version": "0.1.2",
@@ -47,11 +47,11 @@
     "web": "https://help.digitaldopeadvisors.com/"
   },
   "android_tv_receiver": {
-    "version": "0.3.12",
-    "code": 20,
-    "title": "DDA TV Receiver 0.3.12",
+    "version": "0.3.13",
+    "code": 21,
+    "title": "DDA TV Receiver 0.3.13",
     "date": "2026-11-27",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/tv-v0.3.12",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tv-v0.3.12/DDA-TV-RECEIVER-0.3.12.apk"
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/tv-v0.3.13",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tv-v0.3.13/DDA-TV-RECEIVER-0.3.13.apk"
   }
 }
