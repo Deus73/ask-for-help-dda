@@ -55,19 +55,19 @@
     "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tv-v0.3.35/DDA-TV-RECEIVER-0.3.35.apk"
   },
   "android_ask_for_me_lite": {
-    "version": "0.1.50",
-    "code": 51,
-    "title": "Mecum Lite 0.1.50",
+    "version": "0.1.51",
+    "code": 52,
+    "title": "Mecum Lite 0.1.51",
     "date": "2026-11-27",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/ask-for-me-lite-v0.1.50",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/ask-for-me-lite-v0.1.50/ASK-FOR-ME-LITE-0.1.50.apk"
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/ask-for-me-lite-v0.1.51",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/ask-for-me-lite-v0.1.51/ASK-FOR-ME-LITE-0.1.51.apk"
   },
   "android_support_lite": {
-    "version": "0.1.47",
-    "code": 48,
-    "title": "SUPPORT LITE 0.1.47",
+    "version": "0.1.48",
+    "code": 49,
+    "title": "SUPPORT LITE 0.1.48",
     "date": "2026-11-27",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/support-lite-v0.1.47",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/support-lite-v0.1.47/SUPPORT-LITE-0.1.47.apk"
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/support-lite-v0.1.48",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/support-lite-v0.1.48/SUPPORT-LITE-0.1.48.apk"
   }
 }
