@@ -55,12 +55,12 @@
     "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/tv-v0.3.18/DDA-TV-RECEIVER-0.3.18.apk"
   },
   "android_ask_for_me_lite": {
-    "version": "0.1.1",
-    "code": 2,
-    "title": "ASK FOR ME LITE 0.1.1",
+    "version": "0.1.2",
+    "code": 3,
+    "title": "ASK FOR ME LITE 0.1.2",
     "date": "2026-11-27",
-    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/ask-for-me-lite-v0.1.1",
-    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/ask-for-me-lite-v0.1.1/ASK-FOR-ME-LITE-0.1.1.apk"
+    "page": "https://github.com/Deus73/digital-dope-support-downloads/releases/tag/ask-for-me-lite-v0.1.2",
+    "download": "https://github.com/Deus73/digital-dope-support-downloads/releases/download/ask-for-me-lite-v0.1.2/ASK-FOR-ME-LITE-0.1.2.apk"
   },
   "android_support_lite": {
     "version": "0.1.1",
